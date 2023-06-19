@@ -10,20 +10,16 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
-
-        // type: DataTypes.INTEGER,
         // allowNull: false,
-        // primaryKey: true,
-        // autoIncrement: true,
-
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        //unique: true,
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false
+        // allowNull: false
       },
       summary: {
         type: DataTypes.TEXT,
@@ -32,19 +28,13 @@ module.exports = (sequelize) => {
       healthScore: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          min: 0,
-          max: 100,
-        },
       },
       steps: {
-        type: DataTypes.STRING,
-        // allowNull: false
-        // type: DataTypes.ARRAY(DataTypes.TEXT),
+        type: DataTypes.TEXT,
       },
-       create: {
+       created: {
         type: DataTypes.BOOLEAN,// funciona a modo de flat para saber q lo cree yo
-        allowNull: false,
+        // allowNull: false,
         defaultValue: true,
       },
     },

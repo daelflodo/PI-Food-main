@@ -1,10 +1,8 @@
 
 const { Diet } = require('../db');
 const mapApi = require('../utils/getData')
-const { API_KEY } = process.env
 
 const getDiet = async () => {
-    // La primera línea del código declara una constante llamada apiInfo y utiliza la palabra clave await para esperar el resultado de la función getApiInfo(). Esto sugiere que getApiInfo() es una función asíncrona que devuelve una promesa. El uso de await asegura que la asignación a apiInfo espere a que la promesa se resuelva antes de continuar.
 
     const apiInfo = await mapApi();
     const diets = await apiInfo.map((element) => element.diets).flat();

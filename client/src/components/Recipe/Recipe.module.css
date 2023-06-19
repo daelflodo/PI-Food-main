@@ -1,0 +1,68 @@
+.componente {
+    color: rgb(247, 168, 22);
+    color: azure;
+    padding: 5px 13px;
+    border: rgb(196, 138, 12) 8px groove;
+    border-top-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    margin: 0.5%;
+}
+
+.componente button {
+    order: transparent;
+    background-color: rgb(230, 105, 105);
+    float: right;
+    width: 35px;
+    height: 30px;
+    border-radius: .4rem;
+    cursor: pointer;
+}
+
+.componente img {
+    border-radius: 1.5rem;
+
+}
+
+.fire {
+    animation: fire 2s infinite;
+    font-family: "Arial", sans-serif;
+    color: rgb(247, 168, 22);
+}
+
+@keyframes fire {
+    0% {
+        text-shadow:
+            0 0 5px #c48a0c,
+            0 0 10px #c48a0c,
+            0 0 20px #c48a0c,
+            0 0 30px #c48a0c,
+            0 0 40px #c48a0c,
+            0 0 50px #c48a0c,
+            0 0 75px #c48a0c;
+    }
+
+    70% {
+        text-shadow: none;
+    }
+
+    100% {
+        text-shadow: none;
+    }
+}
+
+.diet {
+  color: rgb(247, 168, 22);
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 1em;
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+    /* display: flex;
+    padding: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 90%;
+    max-height: 58px;
+    min-height: 58px; */
+    /* overflow-y: auto; */
+}

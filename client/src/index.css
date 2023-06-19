@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+  color: aliceblue;
+  background-image: url('https://www.xtrafondos.com/wallpapers/degradado-difuminado-verde-7936.jpg');
+  /* background-image: url('https://s2.best-wallpaper.net/wallpaper/1920x1200/1805/Green-texture-paper_1920x1200.jpg'); */
+  /* background-color: rgb(11, 48, 48); */
 }
 
 code {

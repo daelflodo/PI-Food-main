@@ -1,9 +1,35 @@
 import './App.css';
+import Home from './components/Home/Home';
+import LandingPages from './components/LandingPages/LandingPages'
+import {Route, Routes } from 'react-router-dom'
+import Nav from './components/Nav/Nav'
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+import { getAllDiet, getAllRecipes } from './redux/actions/actions';
+import Detail from './components/Detail/Detail';
+import NewRecipe from './components/NewRecipe/NewRecipe';
+
 
 function App() {
+  const dispatch = useDispatch();
+  const location =useLocation()
+  useEffect(() => {
+    dispatch(getAllRecipes());
+    dispatch(getAllDiet());
+  }, []);
+
+
   return (
     <div className="App">
-      <h1>Henry Food</h1>
+      {location.pathname !=='/' && <Nav/>}
+     <Routes>
+      <Route path='/' element = {<LandingPages/>}/>
+      <Route path='/home' element ={<Home/>}/>
+      <Route path='/detail/:id' element={<Detail />} />
+      <Route path='/newRecipe' element={<NewRecipe />} />
+      {/* <Route path=''/> */}
+     </Routes>
     </div>
   );
 }
