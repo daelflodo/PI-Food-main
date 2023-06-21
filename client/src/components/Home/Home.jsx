@@ -4,7 +4,8 @@ import Recipe from "../Recipe/Recipe"
 // import Paginated from "../Paginated/Paginated"
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
-import { OrderName, filterCreated, filterRecipesDiet, orderRecipesScore } from '../../redux/actions/actions';
+import { OrderName, filterCreated, filterRecipesDiet, getAllDiet, getAllRecipes, orderRecipesScore } from '../../redux/actions/actions';
+import { useNavigate } from 'react-router-dom';
 // import { getAllRecipes } from "../../redux/actions/actions";
 
 const Home = () => {
@@ -12,22 +13,29 @@ const Home = () => {
     const allRecipes = useSelector((state) => state.recipes);
     const allDiets = useSelector((state) => state.diets)
     // console.log('todas las dietas ', allDiets);
-    console.log('todas las recetas ',allRecipes);
+    console.log('todas las recetas ', allRecipes);
     const [currentPag, setCurrentPag] = useState(1);
     const [recipesByPag] = useState(9);
     const indexLastRecipe = currentPag * recipesByPag;
     const indexFirstRecipe = indexLastRecipe - recipesByPag;
     const currentRecipes = allRecipes.slice(indexFirstRecipe, indexLastRecipe);
-    const pageNumbers = []//almacenar los números de página
-    // console.log('current home', currentRecipes);
+    const navigate = useNavigate();    // console.log('current home', currentRecipes);
 
+    const pageNumbers = []//almacenar los números de página
     const handlePaginated = (pageNumber) => {
         setCurrentPag(pageNumber);
     };
-
-    for (let i = 1; i <= Math.ceil(allRecipes.length / recipesByPag); i++) {
+    const totalPages = Math.ceil(allRecipes.length / recipesByPag)
+    for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
+    useEffect(() => {
+        // dispatch(getAllDiet)
+        dispatch(getAllRecipes)
+        if (currentPag > totalPages) {
+            setCurrentPag(1)
+        }
+    }, [totalPages])
     // console.log(pageNumbers);
 
     const handleOrderScore = (event) => {
@@ -42,9 +50,19 @@ const Home = () => {
     const handleFilterCreated = (event) => {
         dispatch(filterCreated(event.target.value))
     }
-//row
+    const handleNext = () => {
+        if (currentPag < totalPages) {
+            setCurrentPag(currentPag + 1)
+        }
+    }
+    const handlePrevious = () => {
+        if (currentPag > 1) {
+            setCurrentPag(currentPag - 1)
+        }
+    }
+    //row
     return (
-        <div>
+        <div className={style.container}>
             <div>
                 <select className={style.filter} onChange={handleOrderName}>
                     <option disabled selected>Order by Title</option>
@@ -76,8 +94,9 @@ const Home = () => {
                     }
                 </select>
             </div>
-
+            
             <div className={style.contbutton}>
+                <button onClick={handleNext}>Next</button>
                 {pageNumbers.map((pag) => {
                     return (<button
                         className={currentPag === pag ? "container current" : "container"}
@@ -88,8 +107,9 @@ const Home = () => {
 
                 })
                 }
+                <button onClick={handlePrevious}>Previous</button>
             </div>
-
+            
             <div className={style.row}>
                 {currentRecipes.map((recipe, index) => (
                     <Recipe

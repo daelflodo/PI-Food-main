@@ -1,8 +1,8 @@
 .componente {
-    color: rgb(247, 168, 22);
-    color: azure;
+    color: rgb(18, 79, 68);
+    /* color: azure; */
     padding: 5px 13px;
-    border: rgb(196, 138, 12) 8px groove;
+    border: rgb(18, 79, 68) 8px groove;
     border-top-left-radius: 30px;
     border-bottom-right-radius: 30px;
     margin: 0.5%;
@@ -20,7 +20,8 @@
 
 .componente img {
     border-radius: 1.5rem;
-
+    width: 300px;
+    height: 250px;
 }
 
 .fire {
@@ -51,18 +52,18 @@
 }
 
 .diet {
-  color: rgb(247, 168, 22);
+    color: rgb(18, 79, 68);
   font-family: Verdana, Geneva, sans-serif;
-  font-size: 1em;
-  /* white-space: nowrap; */
-  /* overflow: hidden; */
-  /* text-overflow: ellipsis; */
-    /* display: flex;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+    display: flex;
     padding: 10px;
     justify-content: center;
     flex-wrap: wrap;
     width: 90%;
-    max-height: 58px;
-    min-height: 58px; */
-    /* overflow-y: auto; */
+    /* max-height: 58px;
+    min-height: 58px; 
+    overflow-y: auto; */
 }

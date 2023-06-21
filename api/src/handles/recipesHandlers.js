@@ -13,7 +13,7 @@ const getRecipebyIdHandler = async (req, res) => {
     // console.log('Source Id handle:', sourceId);
     try {
         const recipe = await getRecipebyId(id, sourceId);
-        console.log('recipe:', recipe);
+        // console.log('recipe:', recipe);
         res.status(200).json(recipe)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -23,12 +23,17 @@ const getRecipebyIdHandler = async (req, res) => {
 }
 const getRecipesHandler = async (req, res) => {
     const { name } = req.query;
+    console.log('name handle->');
     try {
         const resultRecipes = name ? await searchRecipesByName(name) : await getAllRecipes(); //res.status(400).send('no hay concidencia en la busquedad');
-        if (!Object.keys(resultRecipes[0]).length) throw new Error('Recipe Not Found')
+        // console.log(resultRecipes);
+        // console.log('db control Handle->',resultRecipes[0]);
+        // console.log('db control Handle->',resultRecipes[1]);
+        console.log('handleeeeeeeeeee', !Object.keys(resultRecipes[0]).length);
+        if (!Object.keys(resultRecipes[0]).length) return send('Recipe Not Found')
         return res.status(200).json(resultRecipes)
     } catch (error) {
-        return res.status(405).send(Error.message)
+        return res.status(405).send(error.message)
     }
 }
 

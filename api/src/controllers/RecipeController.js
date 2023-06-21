@@ -3,15 +3,13 @@ const axios = require('axios')
 const { API_KEY } = process.env;
 const mapApi = require('../utils/getData')
 const { Op } = require('sequelize')
-
 //esta funcion puede interactual con el modelo
 //va ser una funcion async pq trabaja con los metodos del models y estos metodos manejan promesas
 //los metodos de los modelos siempre dan una promesa   
 // es llamada por createRecipesHandler
 const createRecipe = async (name, image, summary, healthScore, steps, diets) => {
-    // console.log('viene por body', name, image, summary, healthScore, steps, diets);
     if (!name) throw Error('The name undefined')
-    const newRecipe = await Recipe.create({ name, image, summary, healthScore, steps, diets })
+    const newRecipe = await Recipe.create ({ name, image, summary, healthScore, steps, diets })
     for (let i = 0; i < diets.length; i++) {
         const dietdb = await Diet.findOne({
             where: {
@@ -22,14 +20,29 @@ const createRecipe = async (name, image, summary, healthScore, steps, diets) => 
     }
     return newRecipe;
 }
-
+// const createRecipe = async (name, image, summary, healthScore, steps, diets) => {
+//     if (!name) throw Error('The name undefined')
+//     const newRecipe = await Recipe.findOrCreate ({
+//         where:{name},
+//         default:{ image, summary, healthScore, steps, diets }
+//     })
+//     for (let i = 0; i < diets.length; i++) {
+//         const dietdb = await Diet.findOne({
+//             where: {
+//                 name: diets[i]
+//             }
+//         })
+//         newRecipe.addDiet(dietdb)
+//     }
+//     return newRecipe;
+// }
 const getRecipebyId = async (id, sourceId) => {
     // console.log('id de control', id);
     // console.log('Source Id control:', sourceId);
-    let result, recipeById;
+    let result, recipeById; 
     if (sourceId === 'API') {
-        result = (await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)).data
-        // result = (await axios.get(`http://localhost:8080/recipes/${id}/information?apiKey=${API_KEY}`)).data
+        // result = (await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)).data
+        result = (await axios.get(`http://localhost:8080/recipes/${id}/information?apiKey=${API_KEY}`)).data
 
          recipeById = {
             id: result.id,
@@ -39,8 +52,7 @@ const getRecipebyId = async (id, sourceId) => {
             healthScore: result.healthScore,
             steps: result.analyzedInstructions[0]?.steps?.map((ste) => ste.step ) || [],//API 
             diets: result.diets,
-        }
-        
+        }  
     } else {
         const data = await Recipe.findOne({where:{id},
             include: {
@@ -66,11 +78,9 @@ const getRecipebyId = async (id, sourceId) => {
     }
     // console.log('result control:', result);
     // console.log('result control por valor:', result.name);
-
     // console.log('recipe por id control',recipeById);
     return recipeById
 }
-
 // const getRecipebyId = async (id, sourceId) => { 
 //      console.log('id de control',id);
 //      console.log('Source Id control:', sourceId);
@@ -98,7 +108,7 @@ const getAllRecipes = async () => {
     // buscar en db 
     //buscar en api
     //unificar
-    console.log("algo ");
+    // console.log("algo ");
     const dbRecipes = await Recipe.findAll(
         {
             include: {
@@ -119,47 +129,35 @@ const getAllRecipes = async () => {
     // console.log('formattedRecipe ', formattedRecipe);
     // const apiRecipesAll = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&number=100&addRecipeInformation=true`)
     const apiRecipes = await mapApi() //hago el llamado de la funcion q mapea la data de la api
-    console.log('api recipes control:',apiRecipes);
-    // return [...dbRecipes, ...apiRecipes]
+    // console.log('api recipes control:',apiRecipes);
     return [...formattedRecipe, ...apiRecipes]
-    // return [...apiRecipes]
 }
 // console.log('nombre: ',name);
 const searchRecipesByName = async (name) => {
-    const dbRecipes = await Recipe.findAll({
-        where: {
-            name: { [Op.iLike]:`%${name}%`}//% se utiliza como un comodín para permitir espacios antes o después del nombre.
-        },include: {//Se especifica que solo se deben incluir los atributos "name" de la tabla "Diet"
-            model: Diet,
-            attributes: ["name"],
-            through: {//se indica que no se deben incluir los atributos de la tabla de unión entre "Recipe" y "Diet".
-              attributes: []
-            }} 
-    })
-
-    // const dbRecipes = await Recipe.findAll({
-    //     where: {
-    //         name: {
-    //             [Op.iLike]: `%${name}%`
-    //         }
-    //     }
-    // });
-    // console.log('db recip control',dbRecipes);
-
-    // console.log('receta: ',!Object.keys(dbRecipes).length);
-    // if(dbRecipes.length){
-    //     console.log('no soy');
-    //     // dbRecipes=await Recipe.findAll()
-    // }
+    let searchedRecipesDb=[]
+    const allBD = await Recipe.findAll()
+    if(allBD){
+        const dbRecipes = await Recipe.findAll({ 
+            where: {
+                name: { [Op.iLike]:`%${name}%`}//% se utiliza como un comodín para permitir espacios antes o después del nombre.
+            },
+        })
+         searchedRecipesDb=dbRecipes// si pasa por la base de dato se rompe la api
+        //  searchedRecipesDb=dbRecipes[0].toJSON()// si pasa por la base de dato se rompe la api
+        //  searchedRecipesDb=dbRecipes.map(recipe => recipe.toJSON())
+    }
+    
     //busca en la Api 
     const apiRecipes = await mapApi()
-    console.log('dta control: ',apiRecipes);
+    // let includesApiRecipes =[]
     const includesApiRecipes = await apiRecipes.filter((element) =>
         element.name.toLowerCase().includes(name.toString().toLowerCase())
     )
-    // console.log('receta api: ',includesApiRecipes[0]);
-    if (!includesApiRecipes[0]) return res.status(404).json({ error: "La receta no existe." });
-    return [...dbRecipes, ...includesApiRecipes]
+    
+    // console.log('DB',searchedRecipesDb);
+    // console.log('api',includesApiRecipes);
+    console.log('*******************************************');
+    return [...searchedRecipesDb, ...includesApiRecipes]
 }
 module.exports = {
     createRecipe,

@@ -63,7 +63,7 @@ export function postRecipes (payload){
         })
         
        } catch (error) {
-        console.log(error.message);
+        alert(error.message)
        }
     }
 }
@@ -78,7 +78,7 @@ export const searchRecipesByName = (name) => {
                 payload: dataRecipe.data//--
             })
         } catch (error) {
-            alert(error.message)
+            alert(error.message.data)
         }
     }
 }

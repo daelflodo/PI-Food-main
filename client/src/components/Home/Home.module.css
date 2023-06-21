@@ -1,3 +1,6 @@
+.container{
+  /* background-color: rgb(88, 206, 143); */
+}
 .contbutton {
     margin: 0.4rem;
     margin-top: 0.5rem;
@@ -11,17 +14,16 @@
   }
   .row {
     display: flex;
-    flex-direction: row;
-    border-radius: 15px;
     flex-wrap: wrap;
-    gap: 1em;
+    border-radius: 15px;
+    gap: 5em;
     justify-content: center;
     padding: 0 20px 4px;
   }
   
   .row > * {
-    flex-basis: calc(30% - 2rem); /* Ancho base de cada tarjeta */
-    margin: 10px;
+    flex-basis: calc(25% - 2rem);
+    margin: 35px;
   }
   
   @media (max-width: 768px) {

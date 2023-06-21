@@ -4,7 +4,7 @@ const initialState = {
     recipes: [],
     allRecipes: [],
     diets: [],
-    details: [],
+    detais: [],
 }
 const rootReducer = (state = initialState, { type, payload }) => {
     switch (type) {
@@ -19,7 +19,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
             case GET_RECIPE_DETAIL:
             return {
                 ...state,
-                detail: payload,
+                details: payload,
             }
             case GET_ALL_DIET:
             return {
@@ -30,13 +30,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
                 return {
                   ...state,
                   recipes: payload,
-                //   page: state.page < payload.length ? state.page : 1,
                 };
             case POST_RECIPES:
                 return{
                     ...state,
                     recipes:[...state.recipes, payload]
-                    // recipes: payload
                 }
             case ORDER_RECIPES_SCORE:
                  const sortRecipeScore=[...state.recipes]
@@ -55,13 +53,13 @@ const rootReducer = (state = initialState, { type, payload }) => {
                     recipes: payload === 'A-Z'
                     ? sortRecipeAlphabet.sort((a, b) => a.name.localeCompare(b.name))
                     : sortRecipeAlphabet.sort((a, b) => b.name.localeCompare(a.name)),
-                    allRecipes: payload === 'A-Z'
-                    ? [...state.allRecipes.sort((a, b) => a.name.localeCompare(b.name))]
-                    : [...state.allRecipes.sort((a, b) => b.name.localeCompare(a.name))],
+                    // allRecipes: payload === 'A-Z'
+                    // ? [...state.allRecipes.sort((a, b) => a.name.localeCompare(b.name))]
+                    // : [...state.allRecipes.sort((a, b) => b.name.localeCompare(a.name))],
                 }    
             case FILTER_DIET:
                 // state.recipes = state.allRecipes
-                const filterRecipeDiet=[...state.allRecipes]
+                const filterRecipeDiet = [...state.allRecipes]
                 // console.log('paylo: ', payload);
                 // console.log('filter: ', filterRecipeDiet);
                 return{

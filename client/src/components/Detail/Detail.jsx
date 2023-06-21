@@ -12,7 +12,7 @@ console.log('id detail',id);
         dispatch(getRecipeDetail(id));
     }, [id]);
 
-    const data = useSelector((state) => state.detail);
+    const data = useSelector((state) => state.details);
     console.log('data Detail:',data);
     return (
         <div className={styles.enc}>

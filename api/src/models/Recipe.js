@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        //unique: true,
+        unique: true,
       },
       image: {
         type: DataTypes.STRING,
@@ -31,6 +31,7 @@ module.exports = (sequelize) => {
       },
       steps: {
         type: DataTypes.TEXT,
+        allowNull: false,
       },
        created: {
         type: DataTypes.BOOLEAN,// funciona a modo de flat para saber q lo cree yo

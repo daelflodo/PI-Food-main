@@ -15,7 +15,6 @@ const SearchBar = () =>{
         setSearchName('')//limpia el input         
     }
 
-
     return(
         <div className={style.container}>
             <input 
