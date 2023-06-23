@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { GET_ALL_RECIPES, GET_ALL_DIET, GET_RECIPE_DETAIL, ORDER_RECIPES_SCORE, GET_RECIPE_NAME,ORDER_NAME,POST_RECIPES,FILTER_DIET, FILTER_CREATED, } from './actions-types'
-// import {modificatedResults} from 'los100'
 //obtengo todas las recetas para mostrar al iniciar el home las primeras 9 recetas con el paginado
 
 export const getAllRecipes = () => {
@@ -12,7 +11,7 @@ export const getAllRecipes = () => {
                 payload: dataRecipe.data//--
             })
         } catch (error) {
-            console.log(error.message);
+            alert('Error:',error)
         }
     }
 }
@@ -44,7 +43,7 @@ export const getAllDiet = () => {
                 payload: dataDiet.data//---
             })
         } catch (error) {
-            console.log(error.message);
+            alert('Error:',error)
         }
     }
 }
@@ -63,7 +62,7 @@ export function postRecipes (payload){
         })
         
        } catch (error) {
-        alert(error.message)
+        alert(error.response.data)
        }
     }
 }
@@ -78,7 +77,8 @@ export const searchRecipesByName = (name) => {
                 payload: dataRecipe.data//--
             })
         } catch (error) {
-            alert(error.message.data)
+            console.log(error.response);
+            alert(error.response.data)
         }
     }
 }

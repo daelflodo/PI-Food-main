@@ -3,9 +3,8 @@ import style from './Home.module.css'
 import Recipe from "../Recipe/Recipe"
 // import Paginated from "../Paginated/Paginated"
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { OrderName, filterCreated, filterRecipesDiet, getAllDiet, getAllRecipes, orderRecipesScore } from '../../redux/actions/actions';
-import { useNavigate } from 'react-router-dom';
 // import { getAllRecipes } from "../../redux/actions/actions";
 
 const Home = () => {
@@ -19,7 +18,7 @@ const Home = () => {
     const indexLastRecipe = currentPag * recipesByPag;
     const indexFirstRecipe = indexLastRecipe - recipesByPag;
     const currentRecipes = allRecipes.slice(indexFirstRecipe, indexLastRecipe);
-    const navigate = useNavigate();    // console.log('current home', currentRecipes);
+    // const navigate = useNavigate();    // console.log('current home', currentRecipes);
 
     const pageNumbers = []//almacenar los números de página
     const handlePaginated = (pageNumber) => {
@@ -29,14 +28,12 @@ const Home = () => {
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
-    useEffect(() => {
-        // dispatch(getAllDiet)
-        dispatch(getAllRecipes)
-        if (currentPag > totalPages) {
+    useEffect(()=>{
+        if(totalPages<currentPag){
             setCurrentPag(1)
         }
-    }, [totalPages])
-    // console.log(pageNumbers);
+    },[totalPages])
+
 
     const handleOrderScore = (event) => {
         dispatch(orderRecipesScore(event.target.value))
@@ -76,15 +73,10 @@ const Home = () => {
                     <option value="Descendente">Descendente</option>
                 </select>
 
-                <select className={style.filter} onChange={handleFilterCreated}>
-                    <option disabled selected>Filter by Created</option>
-                    <option value="All Recipe">All</option>
-                    <option value="api">Api</option>
-                    <option value="db">Date Base</option>
-                </select>
 
                 <select className={style.filter} onChange={handleFilterDiet}>
                     <option disabled selected>Filter by Diet</option>
+                    <option value="allDiets">All Diets</option>
                     {
                         allDiets?.map((diet, index) => {
                             return <option value={diet.name} key={index}> {diet.name}</option>
@@ -92,6 +84,13 @@ const Home = () => {
 
                         )
                     }
+                </select>
+
+                <select className={style.filter} onChange={handleFilterCreated}>
+                    <option disabled selected>Filter by Created</option>
+                    <option value="allRecipes">All</option>
+                    <option value="api">Recipe Api</option>
+                    <option value="db">Recipe Created</option>
                 </select>
             </div>
             
@@ -138,3 +137,11 @@ const Home = () => {
 };
 
 export default Home;
+
+// useEffect(() => {
+    //     dispatch(getAllRecipes)
+    //     if (currentPag > totalPages) {
+    //         setCurrentPag(1)
+    //     }
+    // }, [totalPages])
+    // console.log(pageNumbers);

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import style from './SearchBar.module.css'
 import {useDispatch} from "react-redux";
-import { searchRecipesByName } from '../../redux/actions/actions';
+import { getAllRecipes, searchRecipesByName } from '../../redux/actions/actions';
 
 const SearchBar = () =>{
     const dispatch = useDispatch()
@@ -12,7 +12,7 @@ const SearchBar = () =>{
     }
     const handleOnClick = (event) => {
         dispatch(searchRecipesByName(searchName))
-        setSearchName('')//limpia el input         
+        setSearchName('')//limpia el input   
     }
 
     return(

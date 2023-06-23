@@ -1,19 +1,16 @@
-const { createRecipe, getRecipebyId, searchRecipesByName, getAllRecipes } = require('../controllers/RecipeController')
-const Recipe = require('../models/Recipe')
-const { Diet } = require('../db')
-// const { search } = require('../routes')
-
-
-
+const createRecipe = require('../controllers/createRecipe')
+const getRecipebyId = require('../controllers/getRecipebyId')
+const getAllRecipes = require('../controllers/getAllRecipes')
+const searchRecipesByName = require('../controllers/searchRecipesByName')
+const recipeUpdate = require('../controllers/recipeUpdate')
+const results = require('../utils/los100')
+const recipeDelete = require('../controllers/recipeDelete')
 
 const getRecipebyIdHandler = async (req, res) => {
     const { id } = req.params//GKUYGJGV-54GHGFG-GDFG
-    // console.log('id de handle',id);
     const sourceId = isNaN(id) ? 'DB' : 'API'
-    // console.log('Source Id handle:', sourceId);
     try {
         const recipe = await getRecipebyId(id, sourceId);
-        // console.log('recipe:', recipe);
         res.status(200).json(recipe)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -23,14 +20,10 @@ const getRecipebyIdHandler = async (req, res) => {
 }
 const getRecipesHandler = async (req, res) => {
     const { name } = req.query;
-    console.log('name handle->');
+    // console.log('name handle->');
     try {
-        const resultRecipes = name ? await searchRecipesByName(name) : await getAllRecipes(); //res.status(400).send('no hay concidencia en la busquedad');
-        // console.log(resultRecipes);
-        // console.log('db control Handle->',resultRecipes[0]);
-        // console.log('db control Handle->',resultRecipes[1]);
-        console.log('handleeeeeeeeeee', !Object.keys(resultRecipes[0]).length);
-        if (!Object.keys(resultRecipes[0]).length) return send('Recipe Not Found')
+        const resultRecipes = name ? await searchRecipesByName(name) : await getAllRecipes();
+        if (resultRecipes.error) return res.status(404).send(resultRecipes.error)
         return res.status(200).json(resultRecipes)
     } catch (error) {
         return res.status(405).send(error.message)
@@ -41,17 +34,48 @@ const getRecipesHandler = async (req, res) => {
 const createRecipesHandler = async (req, res) => {
     const { name, image, summary, healthScore, steps, diets } = req.body
     //colocamos un try catch en esta pocicion y resuelve el error q podria retornar el controller
-    // console.log('bodyy ',req.body);
     try {
+        // if (!diets[0]) throw Error('La receta debe tener al menos un tipo de dieta')
+
         const newRecipe = await createRecipe(name, image, summary, healthScore, steps, diets)
-        if (!diets[0]) throw Error('La receta debe tener al menos un tipo de dieta')
-        res.status(201).json(newRecipe)
+        console.log(newRecipe.error);
+        if (!diets[0]) return res.status(404).send(newRecipe.error)
+        if (newRecipe.error) return res.status(404).send(newRecipe.error)// responde con el error q viene del controlador
+        return res.status(201).send(newRecipe)
     } catch (error) {
         res.status(401).json({ error: error.message });
+    }
+}
+
+const updateRecipesHandler = async (req, res) => {
+    const { id, name, image, summary, healthScore, steps, diets } = req.body
+    console.log('put->', req.body);
+    try {
+        if (!id) return res.status(404).send('Missing ID data')
+        const update = await recipeUpdate(id, name, image, summary, healthScore, steps, diets)
+
+        if (update.error) return res.status(404).send(update.error)
+        if(update.msg) return res.status(200).send(update.msg )
+    } catch (error) {
+        return res.status(401).json(error)
+    }
+    // res.send(`Dael: Esta ruta actualiza una receta con id: `)
+}
+const deleteRecipesHandler = async(req, res) => {
+    // res.send(`Dael: Esta ruta actualiza una receta con id: `)
+    const { id } = req.params
+    try {
+        const resultDelete = await recipeDelete(id)
+        if(resultDelete.error) return res.status(400).send(resultDelete.error)
+        if(resultDelete.msg) return res.status(200).send(resultDelete.msg)
+    } catch (error) {
+        return res.status(401).json(error)
     }
 }
 module.exports = {
     getRecipebyIdHandler,
     getRecipesHandler,
-    createRecipesHandler
+    createRecipesHandler,
+    updateRecipesHandler,
+    deleteRecipesHandler
 }

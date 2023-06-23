@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { getAllDiet, getAllRecipes } from './redux/actions/actions';
 import Detail from './components/Detail/Detail';
 import NewRecipe from './components/NewRecipe/NewRecipe';
+import Modify from './components/NewRecipe/Modify';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route path='/home' element ={<Home/>}/>
       <Route path='/detail/:id' element={<Detail />} />
       <Route path='/newRecipe' element={<NewRecipe />} />
+      <Route path='/modify' element={<Modify />} />
       {/* <Route path=''/> */}
      </Routes>
     </div>

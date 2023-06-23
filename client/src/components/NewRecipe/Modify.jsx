@@ -2,28 +2,29 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import validation from '../Validation/Validation'
 import style from '../NewRecipe/NewRecipe.module.css'
-import { getAllDiet, getAllRecipes, postRecipes } from "../../redux/actions/actions";
+import { getAllDiet } from "../../redux/actions/actions";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 
-const NewRecipe = () => {
+const Modify = () => {
     const dispatch = useDispatch();
     let listDiets = useSelector((state) => state.diets);
     // console.log('lista ', listDiets);
     const [errors, setErrors] = useState({})
-    const [form, setForm] = useState({//1
+    const [form, setForm] = useState({
+        id: "",
         name: "",
         summary: "",
         healthScore: "",
+        healthScoreModify:"",
         steps: "",
         diets: [],
         image: "",
     });
-    // console.log('recipe',recipe);
-    // console.log('errors',errors);
-    // console.log(recipe.diets);
+
     useEffect(() => {
         dispatch(getAllDiet());
-        dispatch(getAllRecipes());
+        // dispatch(getAllRecipes());
     }, []);
 
     const handleChange = (event) => {
@@ -47,23 +48,10 @@ const NewRecipe = () => {
                 [event.target.name]: event.target.value
             }))
         }
-
         //declaramos la funcion validation dentro del handleChange para q las validaciones sean en tiempo real o mejor dicho
         //cada ves que cambie el estado de los input
     }
     //selecciona lso tipos de diet
-    const handleSelect = (event) => {
-        setForm({
-            ...form,
-            diets: [...form.diets, event.target.value]
-        })
-    }
-    const handleSteps = (event) => {
-        setForm({
-            ...form,
-            steps: [...form.steps, event.target.value]
-        })
-    }
     // Elimina los tipos de Diet
     const handleDelete = (diet) => {
         setForm({
@@ -73,37 +61,39 @@ const NewRecipe = () => {
     }
     const handleSubmit = (event) => {
 
-        if (form.name ==='' || Object.keys(errors).length !== 0) {
+        if (form.id === '' || errors.id || errors.healthScoreModify) {
             event.preventDefault()
-            alert('Missing data')
+            alert('missing data')  
         }
-        else{
-            dispatch(postRecipes(form))
-            // alert(`Recetas ${recipe.name} creada`)
-        } 
-
-        //agregar una imagen default
-        // const newRecipe = {
-        //     ...recipe,
-        //     image: recipe.image // || o una imagen por default
-        // }
-
+        else {
+            axios.put("http://localhost:3001/recipes/",form) //hago un post a la ur pasandole el body recipe(que son los values del formulario)
+            .then(response=>alert(response.data))//cuando se resuelva la promesa hago un alert de la respuesta
+            .catch(error => alert(error.response.data))
+        }
+       
     }
 
 
     return (
         <div className={style.container}>
-            <h1>New Recipe</h1>
+            <h1>Modify Recipe</h1>
             <form onSubmit={handleSubmit} >
-                {/* <span>New Recipe</span> */}
-                { !form.name && <label style={{ color: "red" }} htmlFor="name">Name</label>}
+                {!form.id && <label style={{ color: "red" }} htmlFor="id">id</label>}
+                <input
+                    name="id"
+                    type="text"
+                    value={form.id}
+                    onChange={handleChange}
+                />
+                {errors.id && <p style={{ color: "red" }}>{errors.id}</p>}
+
+                {!form.name && <label style={{ color: "red" }} htmlFor="name">Name</label>}
                 <input
                     name="name"
                     type="text"
                     value={form.name}
                     onChange={handleChange}
                 />
-                {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
 
                 {!form.summary && <label style={{ color: "red" }} htmlFor="summary">Summary</label>}
                 <input
@@ -112,7 +102,6 @@ const NewRecipe = () => {
                     value={form.summary}
                     onChange={handleChange}
                 />
-                {errors.summary && <p style={{ color: "red" }}>{errors.summary}</p>}
 
                 {!form.healthScore && <label style={{ color: "red" }} htmlFor="healthScore">Health Score</label>}
                 <input
@@ -121,7 +110,8 @@ const NewRecipe = () => {
                     value={form.healthScore}
                     onChange={handleChange}
                 />
-                {errors.healthScore && <p style={{ color: "red" }}>{errors.healthScore}</p>}
+                 {errors.healthScoreModify && <p style={{ color: "red" }}>{errors.healthScoreModify}</p>}
+
 
                 {!form.steps && <label style={{ color: "red" }} htmlFor="steps">Steps</label>}
                 <input
@@ -132,25 +122,19 @@ const NewRecipe = () => {
                 // onChange={handleSteps}
                 />
                 {/* <button onClick={handleadd}>add</button> */}
-                {errors.steps && <p style={{ color: "red" }}>{errors.steps}</p>}
                 <br />
 
-                {!form.image && <label style={{color:"red"}} htmlFor="image" >Url image</label>}
+                {!form.image && <label style={{ color: "red" }} htmlFor="image" >Url image</label>}
                 <input
                     name="image"
                     type="text"
                     value={form.image}
                     onChange={handleChange}
                 />
-                
-                { errors.image && <p style={{ color: "red" }}>{errors.image}</p>}
 
-                {/* ------------------------------------------- */}
-                {/* <div > */}
                 {/* hago un mapeo para agregar la dieta */}
 
-                {/* <br /> */}
-                {/* <select name="diets" onChange={(event) => handleSelect(event)}> */}
+
                 <select className={style.diets} name="diets" onChange={handleChange}>
                     <option disabled selected>Select a diet</option>
                     {listDiets?.map((element, index) => (
@@ -159,7 +143,6 @@ const NewRecipe = () => {
                         </option>
                     ))}
                 </select>
-                {errors.diets && <p style={{ color: "red" }}>{errors.diets}</p>}
                 {/* hago un mapeo para borrar la dieta */}
                 <div >
                     {form.diets?.map((diet, index) => (
@@ -173,15 +156,10 @@ const NewRecipe = () => {
                     ))}
 
                 </div>
-                {/* </div> */}
 
-
-                {/* ------------------------------------------- */}
-                <br />
-                        
-                <button>Create</button>
+                <button name="add">Modify</button>
             </form>
         </div>
     )
 }
-export default NewRecipe
+export default Modify

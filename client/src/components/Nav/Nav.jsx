@@ -20,8 +20,9 @@ const Nav = () => {
                 <Link to={'/'}><img src={logoFood} alt="food-logo" width="50px" height="50px" /></Link>
                 {location.pathname!=='/home' && <Link to={'/home'}><button>Home</button></Link>}
                 {location.pathname === '/home' && <SearchBar />}
-                <button  onClick={handleOnClick}>Reset</button>
+                {/* <button  onClick={handleOnClick}>Reset</button> */}
                 {location.pathname === '/home'&& <Link to={'/newRecipe'}><button>New Recipe</button></Link>} {/* este link te dirige a un nuevo componente para crear recetas*/}
+                {location.pathname === '/home'&& <Link to={'/modify'}><button>Modify Recipe</button></Link>} {/* este link te dirige a un nuevo componente para crear recetas*/}
                 <Link to={'https://github.com/daelflodo'}><img src={logoGitHub} alt="" width="75px" height="40px"  /></Link>
             </nav>
         </div>
