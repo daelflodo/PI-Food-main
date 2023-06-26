@@ -3,7 +3,7 @@ import style from './Home.module.css'
 import Recipe from "../Recipe/Recipe"
 // import Paginated from "../Paginated/Paginated"
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { OrderName, filterCreated, filterRecipesDiet, getAllDiet, getAllRecipes, orderRecipesScore } from '../../redux/actions/actions';
 // import { getAllRecipes } from "../../redux/actions/actions";
 
@@ -28,12 +28,7 @@ const Home = () => {
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
-    useEffect(()=>{
-        if(totalPages<currentPag){
-            setCurrentPag(1)
-        }
-    },[totalPages])
-
+  
 
     const handleOrderScore = (event) => {
         dispatch(orderRecipesScore(event.target.value))
@@ -43,6 +38,7 @@ const Home = () => {
     }
     const handleFilterDiet = (event) => {
         dispatch(filterRecipesDiet(event.target.value))
+        setCurrentPag(1)
     }
     const handleFilterCreated = (event) => {
         dispatch(filterCreated(event.target.value))
@@ -137,11 +133,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// useEffect(() => {
-    //     dispatch(getAllRecipes)
-    //     if (currentPag > totalPages) {
-    //         setCurrentPag(1)
-    //     }
-    // }, [totalPages])
-    // console.log(pageNumbers);

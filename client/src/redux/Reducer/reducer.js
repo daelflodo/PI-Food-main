@@ -1,4 +1,4 @@
-import{ GET_ALL_RECIPES,GET_ALL_DIET ,GET_RECIPE_DETAIL,GET_RECIPE_NAME,POST_RECIPES, ORDER_RECIPES_SCORE,ORDER_NAME,FILTER_DIET,FILTER_CREATED } from '../actions/actions-types'
+import{ GET_ALL_RECIPES,GET_ALL_DIET ,GET_RECIPE_DETAIL,GET_RECIPE_NAME,POST_RECIPES, ORDER_RECIPES_SCORE,ORDER_NAME,FILTER_DIET,FILTER_CREATED,DELETE } from '../actions/actions-types'
 
 const initialState = { 
     recipes: [],
@@ -35,6 +35,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
                     ...state,
                     recipes:[...state.recipes, payload]
                 }
+            case DELETE:
+                return{
+                    ...state,
+                    recipes: state.recipes.filter(rec=> rec.id !== payload)
+                }
             case ORDER_RECIPES_SCORE:
                  const sortRecipeScore=[...state.recipes]
                 return {
@@ -69,7 +74,7 @@ const rootReducer = (state = initialState, { type, payload }) => {
                 }
             
             case FILTER_CREATED:
-                    const allRecipes= state.recipeDiet
+                    const allRecipes= state.copyRecipes
                     const filterCreated =  payload === 'db' 
                         ?allRecipes.filter(recip => recip.created)
                         :allRecipes.filter(recip => !recip.created)

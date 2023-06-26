@@ -3,7 +3,6 @@ const getRecipebyId = require('../controllers/getRecipebyId')
 const getAllRecipes = require('../controllers/getAllRecipes')
 const searchRecipesByName = require('../controllers/searchRecipesByName')
 const recipeUpdate = require('../controllers/recipeUpdate')
-const results = require('../utils/los100')
 const recipeDelete = require('../controllers/recipeDelete')
 
 const getRecipebyIdHandler = async (req, res) => {
@@ -62,7 +61,6 @@ const updateRecipesHandler = async (req, res) => {
     // res.send(`Dael: Esta ruta actualiza una receta con id: `)
 }
 const deleteRecipesHandler = async(req, res) => {
-    // res.send(`Dael: Esta ruta actualiza una receta con id: `)
     const { id } = req.params
     try {
         const resultDelete = await recipeDelete(id)

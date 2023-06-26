@@ -14,7 +14,7 @@ const createRecipe = async (name, image, summary, healthScore, steps, diets) => 
         }
       });
       if(!recipeFound[0]){
-          const newRecipe = await Recipe.create ({ name, image, summary, healthScore, steps, diets })
+          const newRecipe = await Recipe.create ({ name, image, summary, healthScore, steps })
           for (let i = 0; i < diets.length; i++) {
               const dietdb = await Diet.findOne({
                   where: {
@@ -27,21 +27,5 @@ const createRecipe = async (name, image, summary, healthScore, steps, diets) => 
       }
       return{error:'Recipe name already exists'}
 }
-// const createRecipe = async (name, image, summary, healthScore, steps, diets) => {
-//     if (!name) throw Error('The name undefined')
-//     const newRecipe = await Recipe.findOrCreate ({
-//         where:{name},
-//         default:{ image, summary, healthScore, steps, diets }
-//     })
-//     for (let i = 0; i < diets.length; i++) {
-//         const dietdb = await Diet.findOne({
-//             where: {
-//                 name: diets[i]
-//             }
-//         })
-//         newRecipe.addDiet(dietdb)
-//     }
-//     return newRecipe;
-// }
 module.exports = createRecipe ;
    

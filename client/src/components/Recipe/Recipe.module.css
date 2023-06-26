@@ -63,7 +63,7 @@
     justify-content: center;
     flex-wrap: wrap;
     width: 90%;
-    /* max-height: 58px;
-    min-height: 58px; 
-    overflow-y: auto; */
+    /* min-height: 108px;
+    min-height: 85px;  */
+    /* overflow-y: auto; */
 }

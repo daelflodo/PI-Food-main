@@ -12,15 +12,16 @@ const recipeUpdate = async(id,name, image, summary, healthScore, steps, diets) =
     if(summary)recipeUpd.summary=summary;
     if(healthScore)recipeUpd.healthScore=healthScore; 
     if(steps)recipeUpd.steps=steps;
-    if(diets)recipeUpd.diets=diets;
-    // for (let i = 0; i < diets.length; i++) {
-    //     const dietdb = await Diet.findOne({
-    //         where: {
-    //             name: diets[i]
-    //         }
-    //     })
-    //     newRecipe.addDiet(dietdb)
-    // }
+    if(diets){
+        for (let i = 0; i < diets.length; i++) {
+            const dietdb = await Diet.findOne({
+                where: {
+                    name: diets[i]
+                }
+            })
+            recipeUpd.addDiet(dietdb)
+        }
+    }
     await recipeUpd.save();
     return {msg:'Successfully modified recipe'};
 }

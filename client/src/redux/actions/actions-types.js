@@ -8,4 +8,5 @@ export const ORDER_RECIPES_SCORE = 'ORDER_RECIPES_SCORE';
 export const ORDER_NAME = 'ORDER_NAME';
 export const FILTER_DIET = 'FILTER_DIET';
 export const FILTER_CREATED = 'FILTER_CREATED';
+export const DELETE = 'DELETE';
 
