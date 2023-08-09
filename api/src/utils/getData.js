@@ -3,8 +3,8 @@ const results = require('./los100')
 const { API_KEY } = process.env
 
 const mapApi = async () => {
-    const apiData = await axios.get(`http://localhost:8080/recipes/complexSearch?apiKey=${API_KEY}&number=100&addRecipeInformation=true`);
-    // const apiData = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&number=100&addRecipeInformation=true`);
+    // const apiData = await axios.get(`http://localhost:8080/recipes/complexSearch?apiKey=${API_KEY}&number=100&addRecipeInformation=true`);
+    const apiData = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&number=100&addRecipeInformation=true`);
     const mapRecipes = await apiData.data.results.map(element => {
         return {
             id: element.id,

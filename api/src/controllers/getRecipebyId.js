@@ -6,8 +6,8 @@ const { API_KEY } = process.env;
 const getRecipebyId = async (id, sourceId) => {
     let result, recipeById; 
     if (sourceId === 'API') {
-        // result = (await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)).data
-        result = (await axios.get(`http://localhost:8080/recipes/${id}/information?apiKey=${API_KEY}`)).data
+        result = (await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)).data
+        // result = (await axios.get(`http://localhost:8080/recipes/${id}/information?apiKey=${API_KEY}`)).data
          recipeById = {
             id: result.id,
             name: result.title,//API
@@ -16,7 +16,7 @@ const getRecipebyId = async (id, sourceId) => {
             healthScore: result.healthScore,
             steps: result.analyzedInstructions[0]?.steps?.map((ste) => ste.step ) || [],//API 
             diets: result.diets,
-        }  
+        } 
     } else {
         const data = await Recipe.findOne({where:{id},
             include: {
